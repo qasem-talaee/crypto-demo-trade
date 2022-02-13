@@ -73,8 +73,10 @@ class DemoTrade(QMainWindow):
                 if results[8] == 'nan':
                     self._start_time = results[1]
                     self._pos = results[2]
-                    self._buy_price = float(results[3])
-                    self._sell_price = float(results[4])
+                    if self._pos == 'LONG':
+                        self._buy_price = float(results[3])
+                    else:
+                        self._sell_price = float(results[4])
                     self._tp = results[5]
                     self._sl = results[6]
                     if self._tp != 'nan':
@@ -100,9 +102,11 @@ class DemoTrade(QMainWindow):
                 else:
                     self._balance = float(results[9])
                     self.cost_label.setText(str(self._balance))
+                    self.__open_position = False
             else:
                 self._balance = 100.0
                 self.cost_label.setText(str(self._balance))
+                self.__open_position = False
         
     def select_market(self):
         self.reset()
@@ -242,10 +246,10 @@ class DemoTrade(QMainWindow):
         self.cost_label.setText(str(balance))
     
     def reset(self):
-        self._buy_price = 'nan'
-        self._sell_price = 'nan'
-        self._tp = 'nan'
-        self.sl = 'nan'
+        #self._buy_price = 'nan'
+        #self._sell_price = 'nan'
+        #self._tp = 'nan'
+        #self._sl = 'nan'
         self.entry_price_label.setText('')
         self.lig_price_label.setText('')
         self.percent_label.setText('')
