@@ -246,10 +246,12 @@ class DemoTrade(QMainWindow):
         self.cost_label.setText(str(balance))
     
     def reset(self):
-        #self._buy_price = 'nan'
-        #self._sell_price = 'nan'
-        #self._tp = 'nan'
-        #self._sl = 'nan'
+        self.__open_position = False
+        time.sleep(3)
+        self._buy_price = 'nan'
+        self._sell_price = 'nan'
+        self._tp = 'nan'
+        self._sl = 'nan'
         self.entry_price_label.setText('')
         self.lig_price_label.setText('')
         self.percent_label.setText('')
