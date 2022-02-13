@@ -1,6 +1,6 @@
-from sys import flags
 import requests
 import time
+import json
 
 class API:
     
@@ -13,12 +13,15 @@ class API:
             except:
                 print('Try again')
             else:
-                data = data.json()['prices']
-                result = []
-                for i in range(len(data)):
-                    result.append(float(data[i][1]))
-                flag = False
-                return result
+                if data.status_code == 200 and ('application/json' in data.headers.get('content-type')):
+                    data = data.json()['prices']
+                    result = []
+                    for i in range(len(data)):
+                        result.append(float(data[i][1]))
+                    flag = False
+                    return result
+                else:
+                    time.sleep(2)
     
     def get_kline(self, market):
         flag = True
@@ -28,9 +31,12 @@ class API:
             except:
                 print('Try again')
             else:
-                data = data.json()
-                flag = False
-                return data[market]['usd']
+                if data.status_code == 200 and ('application/json' in data.headers.get('content-type')):
+                    data = data.json()
+                    flag = False
+                    return data[market]['usd']
+                else:
+                    time.sleep(2)
     
     def get_list(self):
         try:
@@ -38,8 +44,9 @@ class API:
         except:
             return 0
         else:
-            data = data.json()
-            coin = dict()
-            for i in range(len(data)):
-                coin[data[i]['id']] = data[i]['symbol'].upper() + 'USDT'
-            return coin
+            if data.status_code == 200 and ('application/json' in data.headers.get('content-type')):
+                data = data.json()
+                coin = dict()
+                for i in range(len(data)):
+                    coin[data[i]['id']] = data[i]['symbol'].upper() + 'USDT'
+                return coin
