@@ -212,7 +212,7 @@ class DemoTrade(QMainWindow):
         msg.setIcon(QMessageBox.Icon.Information)
         msg.exec_()
     
-    def close_pos(self):
+    def close_pos(self, in_price = None):
         self.__open_position = False
         self.openbutton.setEnabled(True)
         self.closebutton.setEnabled(False)
@@ -228,7 +228,7 @@ class DemoTrade(QMainWindow):
         with open(file_name, 'a') as f:
             writer = csv.writer(f)
             if self._pos == 'LONG':
-                price = float(self.robot.get_kline(self._id))
+                price = in_price or float(self.robot.get_kline(self._id))
                 percent = ((price - self._buy_price) / (price)) * 100 * self._leverage
                 balance = (percent / 100) * self._balance + self._balance
                 writer.writerow([self._market, self._start_time, self._pos, str(self._buy_price), str(price), str(self._tp), str(self._sl), str(self._leverage), str(percent), str(balance)])
@@ -274,11 +274,13 @@ class DemoTrade(QMainWindow):
                 self.balance_label.setText(str(amount_tpsl_balance))
                 prices = self.robot.historical(self._id, self._start_time)
                 if type(self._tp) == float and len(prices) != 0:
-                    if max(prices) >= self._tp or min(prices) <= self._sl:
-                        self.close_pos()
+                    if max(prices) >= self._tp:
+                        self.close_pos(self._tp)
+                    if min(prices) <= self._sl:
+                        self.close_pos(self._sl)
                 if len(prices) != 0:
                     if min(prices) <= self._lig_price:
-                        self.close_pos()
+                        self.close_pos(self._lig_price)
             else:
                 self.pos_label.setText('SHORT / SELL')
                 self.entry_price_label.setText(str(self._sell_price))
@@ -294,11 +296,13 @@ class DemoTrade(QMainWindow):
                 self.balance_label.setText(str(amount_tpsl_balance))
                 prices = self.robot.historical(self._id, self._start_time)
                 if type(self._tp) == float and len(prices) != 0:
-                    if min(prices) <= self._tp or max(prices) >= self._sl:
-                        self.close_pos()
+                    if min(prices) <= self._tp:
+                        self.close_pos(self._tp)
+                    if max(prices) >= self._sl:
+                         self.close_pos(self._sl)
                 if len(prices) != 0:
                     if max(prices) >= self._lig_price:
-                        self.close_pos()
+                        self.close_pos(self._lig_price)
         self.timer = threading.Timer(3.0, lambda: self.update()).start()
 
         
