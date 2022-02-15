@@ -5,7 +5,7 @@ The software stores your trading information in csv files. So you can close the 
 
 ![alt text](screenshot/1.png)
 
-## Installtion
+## Installation
 First install these packages:
 ```bash
 sudo apt install python3-pip python3-venv python3-pyqt5
