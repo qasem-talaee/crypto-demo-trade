@@ -59,7 +59,7 @@ class DemoTrade(QMainWindow):
         if not os.path.isfile(file_name):
             open(file_name, 'w').close()
         if os.path.getsize(file_name) == 0:
-            with open(file_name, 'a') as f:
+            with open(file_name, 'a', newline ='') as f:
                 writer = csv.writer(f)
                 writer.writerow(['Market', 'Time', 'Position', 'Buy Price', 'Sell Price', 'TP', 'SL', 'Leverage', 'Percent', 'Balance'])
     
@@ -195,7 +195,7 @@ class DemoTrade(QMainWindow):
             w = open(file_name, 'w')
             w.writelines([item for item in lines[:-1]])
             w.close()
-            with open(file_name, 'a') as f:
+            with open(file_name, 'a', newline ='') as f:
                 writer = csv.writer(f)
                 if self._pos == 'LONG':
                     writer.writerow([self._market, self._start_time, self._pos, str(self._buy_price), 'nan', str(self._tp), str(self._sl), str(self._leverage), 'nan', str(self._balance)])
@@ -229,7 +229,7 @@ class DemoTrade(QMainWindow):
         w = open(file_name, 'w')
         w.writelines([item for item in lines[:-1]])
         w.close()
-        with open(file_name, 'a') as f:
+        with open(file_name, 'a', newline ='') as f:
             writer = csv.writer(f)
             if self._pos == 'LONG':
                 price = in_price or float(self.robot.get_kline(self._id))
